@@ -1,0 +1,35 @@
+{% extends "blog/base.html" %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2 class="mb-4">Notifications</h2>
+
+    {% if notifications %}
+        {% for notification in notifications %}
+            <article class="media content-section {% if not notification.is_read %}border-left border-primary{% endif %}">
+                <div class="media-body">
+                    <div class="article-metadata d-flex justify-content-between">
+                        <small class="text-muted">
+                            {{ notification.created_at|date:"F d, Y h:i A" }}
+                        </small>
+                        {% if not notification.is_read %}
+                            <span class="badge badge-info">New</span>
+                        {% endif %}
+                    </div>
+                    <p class="article-content mt-2">{{ notification.message }}</p>
+
+                    {% if not notification.is_read %}
+                        <a href="{% url 'mark-notification-read' notification.pk %}" class="btn btn-sm btn-outline-primary mt-2">
+                            Mark as Read
+                        </a>
+                    {% endif %}
+                </div>
+            </article>
+        {% endfor %}
+    {% else %}
+        <div class="alert alert-info" role="alert">
+            No notifications available.
+        </div>
+    {% endif %}
+</div>
+{% endblock content %}
